@@ -1,0 +1,44 @@
+---
+title: "Connection Between Lead and IQ"
+author: "Tyler Wick"
+date: "9/15/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Read in the data here, then take a peak at it to make sure it looks like what we expect.
+**Note:** I have set the working directory to where I have the Wick_project_02 data stored on my machine.  You may need to change the "~" in the setwd argument to wherever the downloaded data from Wick_project_02 is stored on your machine.  From there, the file paths should be correct.
+```{r}
+setwd("~/Wick_project_01/Wick_project 02/DataRaw")
+lead_iq <- read.csv("lead-iq-01.csv")
+head(lead_iq)
+```
+
+Let's filter by location
+```{r}
+near <- lead_iq$Smelter == "Near"
+far <- lead_iq$Smelter == "Far"
+
+```
+
+Now let's do some summarizing
+```{r}
+ave_near <- mean(lead_iq$IQ[near])
+ave_near
+
+ave_far <- mean(lead_iq$IQ[far])
+ave_far
+```
+
+The average IQ for a child within one mile of the smelter is 'r ave_near' while the average IQ for a child more than a mile from the smelter is 'r ave_far'.
+
+Now let's make a graph of Location Vs. IQ
+```{r}
+barplot(c("< 1 Mile" = ave_near, "> 1 Mile" =  ave_far), ylab = "Average IQ", xlab = "Location", main = "Location Vs. IQ")
+
+```
+
+As we can see, the average IQ of a child who lived within 1 mile of the smelter does seem to be less than the IQ of a child of lived more than 1 mile away.  This difference was about 17 points on the standard IQ scale.  Of interest going forward would be testing the actual lead levels in these two groups of children to perhaps show a causal link to difference in IQ.
